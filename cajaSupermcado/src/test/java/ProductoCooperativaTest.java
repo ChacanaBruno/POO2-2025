@@ -24,16 +24,8 @@ public class ProductoCooperativaTest {
         assertEquals(9.0, productoCooperativa.precioConDescuento());
     }
 
-    @Test
-    public void testRegistrarse() {
-
-        ProductoCooperativa producto = new ProductoCooperativa(10.0, 3, "Pan",0.10);
-
-        double precioIndicadoAlCliente = producto.registrarse();
-
-        int stockDespuesDeRegistro = producto.getStock();
-
-        assertEquals(9.0, precioIndicadoAlCliente);
-        assertEquals(2, stockDespuesDeRegistro);
+    @Test void cuandoUnProductoCooperativaIndicaSuMontoEsIgualASuPrecioConDescuento() {
+        assertEquals(productoCooperativa.precioConDescuento(), productoCooperativa.indicarMonto());
     }
+
 }

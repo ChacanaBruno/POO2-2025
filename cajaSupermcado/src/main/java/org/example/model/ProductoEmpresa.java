@@ -33,13 +33,15 @@ public class ProductoEmpresa implements Registrable {
         }
     }
 
-
     @Override
-    public double registrarse() {
+    public void registrarse() {
         if (getStock() > 0) {
             this.disminuirStock();
-            return getPrecio();
         }
-        return 0.0;
+    }
+
+    @Override
+    public double indicarMonto() {
+        return this.precio;
     }
 }

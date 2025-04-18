@@ -27,4 +27,19 @@ public class ProductoEmpresaTest {
 
         assertEquals(1.0, productoEmpresa.getStock() );
     }
+
+    @Test
+    void cuandoUnProductoSeRegistraDisminuyeSuStock() {
+        ProductoEmpresa productoRegistra = new ProductoEmpresa(5.0,2,"Pan");
+
+        productoRegistra.registrarse();
+
+        assertEquals(1, productoRegistra.getStock() );
+    }
+
+    @Test void cuandoUnProductoEmpresaIndicaSuMontoEsIgualASuPrecioBase() {
+
+        assertEquals(productoEmpresa.getPrecio(), productoEmpresa.indicarMonto());
+
+    }
 }

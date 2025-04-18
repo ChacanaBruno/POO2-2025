@@ -16,12 +16,8 @@ public class ProductoCooperativa extends ProductoEmpresa {
         return getPrecio() - (getPrecio() * getDescuento());
     }
 
-    @Override
-    public double registrarse() {
-        if (getStock() > 0) {
-            this.disminuirStock();
-            return this.precioConDescuento();
-        }
-        return 0.0;
+    public double indicarMonto() {
+        return precioConDescuento();
     }
+
 }
