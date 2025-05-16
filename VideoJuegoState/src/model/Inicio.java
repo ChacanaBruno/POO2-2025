@@ -6,7 +6,7 @@ public class Inicio extends Estado {
 	@Override
 	public void inicar(Maquina maquina) {
 	     System.out.println("Ingrese una ficha para comenzar.");
-		
+	     
 	}
 
 	@Override

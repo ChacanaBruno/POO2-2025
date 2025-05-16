@@ -18,5 +18,5 @@ public abstract class Estado implements EstadoMaquina {
 		
 		reiniciar(maquina);
 	}
-	
+	 
 }
