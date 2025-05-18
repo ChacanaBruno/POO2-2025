@@ -22,9 +22,9 @@ public class PokerStatus {
 
 		for (Carta card : cards) {
 
-			String value = getValue(card);
+			String value = card.getValue();
 
-			String suit = getSuit(card);
+			String suit = card.getSuit();
 
 			if (isPoquer(value, cards)) {
 				return "Poquer";
@@ -43,18 +43,16 @@ public class PokerStatus {
 
 	private boolean isPoquer(String value, List<Carta> cards) {
 
-		List<String> valuesOfCards = valuesOf(cards);
-
-		return (countCardsWith(value, valuesOfCards) == 4);
+		return (countCardsWith(value, valuesOfCards(cards)) == 4);
 
 	}
 
-	private List<String> valuesOf(List<Carta> cards) {
+	private List<String> valuesOfCards(List<Carta> cards) {
 
 		List<String> values = new ArrayList<>();
 
 		for (Carta card : cards) {
-			values.add(getValue(card));
+			values.add(card.getValue());
 		}
 		return values;
 	}
@@ -81,39 +79,140 @@ public class PokerStatus {
 		List<String> suit = new ArrayList<>();
 
 		for (Carta card : cards) {
-			suit.add(getSuit(card));
+			suit.add(card.getSuit());
 		}
 		return suit;
 	}
 
 	private boolean isTrio(String value, List<Carta> cards) {
 
-		List<String> valuesOfCards = valuesOf(cards);
-
-		return (countCardsWith(value, valuesOfCards) == 3);
+		return (countCardsWith(value, valuesOfCards(cards)) == 3);
 
 	}
 
-	private String getValue(Carta card) {
-		//return card.substring(0, card.length() - 1); // Extrae todo menos el palo, "10D" = "10"
-		return card.getValue();
+	public String verificarManoDeCartasGanadora(HandOfCards firstHandCard, HandOfCards secondHandCard) {
+
+		String jugada1 = this.jugadaDe(firstHandCard);
+		String jugada2 = this.jugadaDe(secondHandCard);
+
+		int valorJugada1 = valorJugada(jugada1);
+		int valorJugada2 = valorJugada(jugada2);
+
+		if (valorJugada1 > valorJugada2) {
+			return "Gana la primera mano: " + jugada1;
+		} else if (valorJugada2 > valorJugada1) {
+			return "Gana la segunda mano: " + jugada2;
+		} else {
+			// Misma jugada, desempatar por valor máximo
+			int valorMax1 = valorMaximoJugada(firstHandCard, jugada1);
+			int valorMax2 = valorMaximoJugada(secondHandCard, jugada2);
+
+			if (valorMax1 > valorMax2) {
+				return "Gana la primera mano por desempate: " + jugada1;
+			} else if (valorMax2 > valorMax1) {
+				return "Gana la segunda mano por desempate: " + jugada2;
+			} else {
+				return "Empate";
+			}
+		}
 	}
 
-	private String getSuit(Carta card) {
-		//return card.substring(card.length() - 1); // Extrae el palo, por ejemplo "10D" -> "D"
-		return card.getSuit();
+	public String jugadaDe(HandOfCards handCard) {
+
+		return verificar(handCard.cardInPosition(0), handCard.cardInPosition(1), handCard.cardInPosition(2),
+				handCard.cardInPosition(3), handCard.cardInPosition(4));
+	}
+	
+	
+	private int valorJugada(String jugada) {
+		switch (jugada) {
+		case "Poquer":
+			return 3;
+		case "Color":
+			return 2;
+		case "Trio":
+			return 1;
+		default:
+			return 0; // Nada o mano no válida
+		}
 	}
 
-	/*
-	 * private int countCardsWithSuit(String suit, List<String> cards) { int count =
-	 * 0; for (String card : cards) { if (getSuit(card).equals(suit)) { count++; } }
-	 * return count; }
-	 */
+	private int valorCarta(String valorCarta) {
+		switch (valorCarta) {
+		case "A":
+			return 14;
+		case "K":
+			return 13;
+		case "Q":
+			return 12;
+		case "J":
+			return 11;
+		case "10":
+			return 10;
+		case "9":
+			return 9;
+		case "8":
+			return 8;
+		case "7":
+			return 7;
+		case "6":
+			return 6;
+		case "5":
+			return 5;
+		case "4":
+			return 4;
+		case "3":
+			return 3;
+		case "2":
+			return 2;
+		default:
+			return 0;
+		}
+	}
 
-	/*
-	 * private int countCardsWithValue(String value, List<String> cards) { int count
-	 * = 0; for (String card : cards) { if (getValue(card).equals(value)) { count++;
-	 * } } return count; }
-	 */
+	private int valorMaximoJugada(HandOfCards hand, String jugada) {
 
+		List<String> valores = hand.valuesOfCards();
+
+		if (jugada.equals("Poquer") || jugada.equals("Trio")) {
+			return valorDeCartaRepetida(valores, jugada);
+		} else if (jugada.equals("Color")) {
+			return valorDeCartaMasAlta(valores);
+		}
+
+		return 0;
+	}
+
+	private int valorDeCartaRepetida(List<String> valores, String jugada) {
+
+		for (String val : valores) {
+
+			int count = ocurrenciasDelValorEnLosValores(val, valores);
+
+			if ((jugada.equals("Poquer") && count == 4) || (jugada.equals("Trio") && count == 3)) {
+				return valorCarta(val);
+			}
+		}
+		return 0;
+	}
+
+	private int ocurrenciasDelValorEnLosValores(String valor, List<String> valores) {
+		int count = 0;
+		for (String v : valores) {
+			if (v.equals(valor))
+				count++;
+		}
+		return count;
+	}
+
+	private int valorDeCartaMasAlta(List<String> valores) {
+		int max = 0;
+		for (String val : valores) {
+			int valorNumerico = valorCarta(val);
+			if (valorNumerico > max) {
+				max = valorNumerico;
+			}
+		}
+		return max;
+	}
 }

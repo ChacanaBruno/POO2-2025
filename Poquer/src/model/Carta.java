@@ -48,5 +48,5 @@ public class Carta {
         }
     }
 	
-	
+	public String getCard() { return getValue() + getSuit(); }
 }

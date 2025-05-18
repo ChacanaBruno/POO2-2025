@@ -1,6 +1,7 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ class CartaTest {
 	private Carta card3;
 	private Carta card4;
 	
+	private Carta cardMock;
+	
 	@BeforeEach
 	void setup() {
 		card = new Carta("2", "D");
@@ -21,6 +24,8 @@ class CartaTest {
 		card3 = new Carta("3", "C");
 		
 		card4 = new Carta("2", "C");
+		
+		
 	}
 	
 	@Test
